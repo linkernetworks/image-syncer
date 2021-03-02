@@ -29,10 +29,15 @@ steps:
 #     command: 'build'
 #     workingDirectory: '$(System.DefaultWorkingDirectory)'
   
-- task: CopyFiles@2
+- task: CmdLine@2
   inputs:
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    script: './image-syncer --proc=6 --auth=./auth.json --images=./images.json --retries=3'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-     artifactName: drop
+# - task: CopyFiles@2
+#   inputs:
+#     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#      artifactName: drop
