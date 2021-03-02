@@ -23,16 +23,26 @@ steps:
 - task: CmdLine@2
   inputs:
     script: 'make'
-#     workingDirectory: '$(System.DefaultWorkingDirectory)'
-# - task: Go@0
-#   inputs:
-#     command: 'build'
-#     workingDirectory: '$(System.DefaultWorkingDirectory)'
-  
+
+- task: AzureKeyVault@1
+  inputs:
+    azureSubscription: 'image-syncer'
+    KeyVaultName: 'mosa-secrets'
+    SecretsFilter: 'image-syncer-auth, image-syncer-images'
+    RunAsPreJob: false
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo $(image-syncer-auth) > auth.json;
+      echo $(image-syncer-images) > images.json;
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
 - task: CmdLine@2
   inputs:
     script: './image-syncer --proc=6 --auth=./auth.json --images=./images.json --retries=3'
     workingDirectory: '$(System.DefaultWorkingDirectory)'
+
 
 # - task: CopyFiles@2
 #   inputs:
