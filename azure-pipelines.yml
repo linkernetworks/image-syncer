@@ -35,7 +35,7 @@ steps:
   inputs:
     script: |
       echo $(Auth);
-      echo $(Images)
+      echo $(Images);
       echo $(Auth) > ./auth.json;
       echo $(Images) > ./images.json;
     workingDirectory: '$(System.DefaultWorkingDirectory)'
