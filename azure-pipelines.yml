@@ -14,12 +14,6 @@ steps:
   inputs:
     version: '1.15.6'
 
-# - task: Go@0
-#   inputs:
-#     command: 'get'
-#     arguments: '-d'
-#     workingDirectory: '$(System.DefaultWorkingDirectory)'
-
 - task: CmdLine@2
   inputs:
     script: 'make'
@@ -44,12 +38,3 @@ steps:
   inputs:
     script: './image-syncer --proc=6 --auth=./auth.json --images=./images.json --retries=3'
     workingDirectory: '$(System.DefaultWorkingDirectory)'
-
-
-# - task: CopyFiles@2
-#   inputs:
-#     TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-# - task: PublishBuildArtifacts@1
-#   inputs:
-#      artifactName: drop
