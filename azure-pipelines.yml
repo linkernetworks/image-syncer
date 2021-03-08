@@ -28,10 +28,10 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      echo '$(Auth)';
-      echo '$(Images)';
-      echo '$(Auth)' > ./auth.json;
-      echo '$(Images)' > ./images.json;
+      echo '$(image-syncer-auth)';
+      echo '$(image-syncer-images)';
+      echo '$(image-syncer-auth)' > ./auth.json;
+      echo '$(image-syncer-images)' > ./images.json;
     workingDirectory: '$(System.DefaultWorkingDirectory)'
 
 - task: CmdLine@2
