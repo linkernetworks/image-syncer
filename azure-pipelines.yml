@@ -1,0 +1,40 @@
+# Go
+# Build your Go project.
+# Add steps that test, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/go
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps: 
+- task: GoTool@0
+  inputs:
+    version: '1.15.6'
+
+- task: CmdLine@2
+  inputs:
+    script: 'make'
+
+- task: AzureKeyVault@1
+  inputs:
+    azureSubscription: 'image-syncer'
+    KeyVaultName: 'mosa-secrets'
+    SecretsFilter: 'image-syncer-auth, image-syncer-images'
+    RunAsPreJob: false
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo '$(image-syncer-auth)';
+      echo '$(image-syncer-images)';
+      echo '$(image-syncer-auth)' > ./auth.json;
+      echo '$(image-syncer-images)' > ./images.json;
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+- task: CmdLine@2
+  inputs:
+    script: './image-syncer --proc=6 --auth=./auth.json --images=./images.json --retries=3'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
